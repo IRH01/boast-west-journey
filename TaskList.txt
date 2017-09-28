@@ -1,0 +1,3 @@
+http://blog.csdn.net/linlzk/article/details/51079291
+1、gitlab搭建
+2、web socket集成

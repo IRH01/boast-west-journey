@@ -50,11 +50,13 @@
                 /validateResetPassWord.do*=anon
                 /resetPassWord.do*=anon
                 /admin/cp/cpregister.do*=anon
+                /druid/*=anon
                 /fonts/**=anon
                 /css/**=anon
                 /js/**=anon
                 /lib/**=anon
                 /img/**=anon
+                /websocket/**=anon
                 /kaptchaImage.do**=anon
                 /login.do*=authc
                 /logout.do*=logout

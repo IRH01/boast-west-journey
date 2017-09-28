@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset=UTF-8>
+    <title>Tomcat WebSocket Chat</title>
+    <script>
+        $(function () {
+            var ws = new WebSocket("ws://localhost:8001/ws/chat/nihao");
+            ws.onopen = function () {
+            };
+            ws.onmessage = function (message) {
+                document.getElementById("chatlog").textContent += message.data + "\n";
+            };
+
+            $("#send").click(function () {
+                ws.send(document.getElementById("msg").value);
+                document.getElementById("msg").value = "";
+            });
+
+            $("#end").click(function () {
+                ws.close();
+            })
+        });
+    </script>
+</head>
+<body>
+<div style="text-align:center">
+    <textarea id="chatlog" style=" width: 1200px;height: 700px;"></textarea>
+    <br/>
+    <input id="msg" type="text" class="input-lt form-control" style="width: 658px;margin-left: 355px"/>
+    <button id="send" type="button" class="btn btn-primary">Send!</button>
+    <button id="end" type="button" class="btn btn-danger">End</button>
+</div>
+</div>
+</body>
+</html>
