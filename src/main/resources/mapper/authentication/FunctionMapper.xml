@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hhly.smartdata.mapper.authentication.FunctionMapper">
+
+    <resultMap id="BaseResultMap" type="com.hhly.smartdata.model.authentication.Function">
+        <id column="id" property="id"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="name" property="name"/>
+        <result column="index" property="index"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, parent_id, name, function_index
+    </sql>
+
+    <sql id="where_condition">
+        <where>
+            <if test="parentId != null">
+                and parent_id = #{parentId}
+            </if>
+            <if test="name != null">
+                and name = #{name}
+            </if>
+            <if test="index != null">
+                and function_index = #{index}
+            </if>
+        </where>
+    </sql>
+
+    <select id="search" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        auth_function
+        <include refid="where_condition"/>
+        order by parent_id,function_index
+    </select>
+
+    <select id="get" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        auth_function
+        where id = #{id}
+    </select>
+
+    <select id="getAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        auth_function
+    </select>
+
+    <select id="queryByRole" resultMap="BaseResultMap" parameterType="list">
+        select
+        c.id ,
+        c.parent_id ,
+        c.name ,
+        c.function_index
+        from auth_role_permission a , auth_permission b , auth_function c
+        where a.permission=b.permission
+        and c.id=b.function_id
+        and a.role_id in
+        <foreach collection="list" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+        GROUP BY c.id ,c.parent_id,c.NAME,c.function_index
+    </select>
+
+    <delete id="batchDelete" parameterType="list">
+        delete from auth_function
+        where id in
+        <foreach collection="list" open="(" close=")" separator="," item="id">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="delete">
+        delete
+        from
+        auth_function
+        where
+        id = #{id}
+    </delete>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO auth_function (parent_id, name,function_index)
+        values (
+        #{parentId},
+        #{name},
+        #{index})
+    </insert>
+
+    <update id="update" parameterType="com.hhly.smartdata.model.authentication.Function">
+        UPDATE auth_function
+        <set>
+            <if test="parentId != null">
+                parent_id = #{parentId},
+            </if>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="index != null">
+                function_index = #{index},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+</mapper>

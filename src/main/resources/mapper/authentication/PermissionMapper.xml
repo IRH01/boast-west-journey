@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hhly.smartdata.mapper.authentication.PermissionMapper">
+
+    <resultMap id="BaseResultMap" type="com.hhly.smartdata.model.authentication.Permission">
+        <id column="permission" property="permission"/>
+        <result column="name" property="name"/>
+        <result column="function_id" property="functionId"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        permission, name, function_id,create_time
+    </sql>
+
+    <sql id="where_conditions">
+        <where>
+            <if test="permission != null">
+                and permission = #{permission}
+            </if>
+            <if test="name != null">
+                and name = #{name}
+            </if>
+            <if test="functionId != null">
+                and function_id = #{functionId}
+            </if>
+        </where>
+    </sql>
+
+    <select id="queryByRole" resultMap="BaseResultMap" parameterType="list">
+        select
+        b.permission ,
+        b.name ,
+        b.function_id ,
+        b.create_time
+        from auth_role_permission a , auth_permission b
+        where a.permission=b.permission
+        and a.role_id in
+        <foreach collection="list" item="id" separator="," open="("
+                 close=")">
+            #{id}
+        </foreach>
+        group by b.permission , b.name , b.function_id , b.create_time
+    </select>
+
+    <select id="get" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        auth_permission
+        where
+        permission = #{permission}
+    </select>
+
+    <select id="getAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        auth_permission
+    </select>
+
+    <select id="searchPerms" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        auth_permission
+        <include refid="where_conditions"/>
+    </select>
+
+    <delete id="delete">
+        DELETE
+        FROM
+        auth_permission
+        <include refid="where_conditions"/>
+    </delete>
+
+    <insert id="insert">
+        INSERT INTO auth_permission (
+        permission,
+        NAME,
+        function_id)
+        VALUES
+        (#{permission}, #{name},
+        #{functionId})
+    </insert>
+
+    <update id="update">
+        update auth_permission
+        <set>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="functionId != null">
+                function_id = #{functionId},
+            </if>
+        </set>
+        where permission = #{permission}
+    </update>
+</mapper>
