@@ -50,7 +50,7 @@
                 /validateResetPassWord.do*=anon
                 /resetPassWord.do*=anon
                 /admin/cp/cpregister.do*=anon
-                /druid/*=anon
+                /druid/**=anon
                 /fonts/**=anon
                 /css/**=anon
                 /js/**=anon
@@ -58,8 +58,8 @@
                 /img/**=anon
                 /websocket/**=anon
                 /kaptchaImage.do**=anon
-                /login.do*=authc
-                /logout.do*=logout
+                /login.do=authc
+                /logout.do=logout
                 /**=authc
             </value>
         </property>
